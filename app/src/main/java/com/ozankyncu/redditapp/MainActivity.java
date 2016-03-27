@@ -2,9 +2,11 @@ package com.ozankyncu.redditapp;
 
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.HorizontalScrollView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,11 +54,16 @@ public class MainActivity extends AppCompatActivity {
         myrecyclerview=(RecyclerView)findViewById(R.id.myrecyclerview);
         final RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(this);
         myrecyclerview.setLayoutManager(layoutManager);
+       /* myrecyclerview.addItemDecoration(
+                new HorizontalDividerItemDecoration.Builder(this)
+                        .color(Color.BLUE)
+                        .build());*/
         //adapter=new MyRecyclerAdapter(this,getData());
         //myrecyclerview.setAdapter(adapter);
         updateList(aww);
     }
 
+    //TODO: BU ISLEMLER ASYSNTASKE TASINACAK
     private void updateList(String subredit) {
         counter=0;
         subredit=subredditUrl+subredit+jsonEnd;

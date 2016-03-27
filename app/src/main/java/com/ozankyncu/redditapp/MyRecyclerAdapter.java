@@ -1,11 +1,13 @@
 package com.ozankyncu.redditapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 
@@ -27,9 +29,22 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<ListRowViewHolder> {
 
     @Override
     public ListRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(mContext).inflate(R.layout.list_row,parent,false);
-        ListRowViewHolder listRowViewHolder=new ListRowViewHolder(view);
-        return listRowViewHolder;
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, null);
+        ListRowViewHolder holder = new ListRowViewHolder(v);
+
+        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView redditUrl = (TextView) v.findViewById(R.id.url);
+                TextView title=(TextView)v.findViewById(R.id.title);
+                String postUrl = redditUrl.getText().toString();
+                Intent intent = new Intent(mContext, WebViewActivity.class);
+                intent.putExtra("url", postUrl);
+                intent.putExtra("title",title.getText().toString());
+                mContext.startActivity(intent);
+            }
+        });
+        return holder;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ozankyncu.redditapp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,12 +33,17 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<ListRowViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ListRowViewHolder holder, int position) {
-            ListItems listItems=listItemsList.get(position);
-            holder.itemView.setSelected(focusedItem==position);
-            holder.title.setText(listItems.getTitle());
-            holder.author.setText(listItems.getAuthor());
-            holder.getLayoutPosition();
+    public void onBindViewHolder(ListRowViewHolder listRowViewHolder, int position) {
+        ListItems listItems=listItemsList.get(position);
+        listRowViewHolder.itemView.setSelected(focusedItem==position);
+        listRowViewHolder.getLayoutPosition();
+        mImageLoader= MySingleton.getInstance(mContext).getImageLoader();
+        listRowViewHolder.thumbnail.setImageUrl(listItems.getThumbnail(),mImageLoader);
+        listRowViewHolder.thumbnail.setDefaultImageResId(R.drawable.reddit_placeholder);
+        listRowViewHolder.title.setText(Html.fromHtml(listItems.getTitle()));
+        listRowViewHolder.subreddit.setText(Html.fromHtml(listItems.getSubreddit()));
+        listRowViewHolder.author.setText(Html.fromHtml(listItems.getAuthor()));
+        listRowViewHolder.url.setText(Html.fromHtml(listItems.getUrl()));
 
     }
     public  void clearAdapter()

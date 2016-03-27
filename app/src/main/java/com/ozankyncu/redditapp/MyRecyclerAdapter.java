@@ -31,7 +31,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<ListRowViewHolder> {
     public ListRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, null);
         ListRowViewHolder holder = new ListRowViewHolder(v);
-
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

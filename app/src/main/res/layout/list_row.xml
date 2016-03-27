@@ -3,14 +3,13 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="4dp"
-    android:layout_marginLeft="4dp"
-    android:layout_marginRight="4dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:id="@+id/relLayout" android:layout_height="match_parent"
         android:padding="2dp"
-        android:layout_margin="4dp">
+        android:layout_margin="4dp"
+        android:background="@drawable/selector">
 
         <com.android.volley.toolbox.NetworkImageView
             android:layout_width="80dp"

@@ -27,6 +27,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".NotificationView"
+            android:label="Details of Notification One" android:parentActivityName=".MainActivity">
+        <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value=".MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

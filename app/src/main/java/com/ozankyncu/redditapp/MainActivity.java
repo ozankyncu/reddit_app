@@ -1,15 +1,22 @@
 package com.ozankyncu.redditapp;
 
 import android.app.DownloadManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +49,9 @@ import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class MainActivity extends AppCompatActivity {
+    private int notificationIdOne = 111;
+    private int numMessagesOne = 0;
+    private NotificationManager myNotificationManager;
     private RecyclerView myrecyclerview;
     private List<ListItems> listItemsList=new ArrayList<ListItems>();
     private MyRecyclerAdapter adapter;
@@ -86,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 loadMore(jsonSubreddit);
+                //TODO: YALNIZCA EGITIM AMACLI
+                Notify("New Message","You're loaded more information");
                 refreshLayout.setRefreshing(false);
             }
         });
@@ -93,7 +105,34 @@ public class MainActivity extends AppCompatActivity {
         updateList(aww);
 
     }
-
+    private void Notify(String notificationTitle, String notificationMessage){
+            NotificationCompat.Builder  mBuilder = new NotificationCompat.Builder(this);
+            mBuilder.setContentTitle(notificationTitle);
+            mBuilder.setContentText(notificationMessage);
+            mBuilder.setTicker("Explicit: New Message Received!");
+            mBuilder.setSmallIcon(R.drawable.sol);
+            // Increase notification number every time a new notification arrives
+            mBuilder.setNumber(++numMessagesOne);
+            // Creates an explicit intent for an Activity in your app
+            Intent resultIntent = new Intent(this, NotificationView.class);
+            resultIntent.putExtra("notificationId", notificationIdOne);
+            //This ensures that navigating backward from the Activity leads out of the app to Home page
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            // Adds the back stack for the Intent
+            stackBuilder.addParentStack(NotificationView.class);
+            // Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_ONE_SHOT //can only be used once
+                    );
+            //start the activity when the user clicks the notification text
+            mBuilder.setContentIntent(resultPendingIntent);
+            myNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // pass the Notification object to the system
+            myNotificationManager.notify(notificationIdOne, mBuilder.build());
+    }
 
     private void updateList(String subredit) {
         counter=0;

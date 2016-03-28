@@ -25,8 +25,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.OvershootInterpolator;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -61,18 +64,28 @@ public class MainActivity extends AppCompatActivity {
     public  static  final String TAG="MyRecyclerList";
     private int counter=0;
     private static final String aww="aww";
+    private static final String funny="funny";
+    private static final String food="food";
     private static final String subredditUrl ="http://www.reddit.com/r/";
     private static final String jsonEnd = "/.json";
     private static final String qCount = "?count=";
     private static final String after = "&after=";
     private ProgressDialog progressDialog;
+    private Spinner spinnertool;
     com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout refreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        spinnertool=(Spinner)findViewById(R.id.spinner_nav);
+        if(toolbar!=null){
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        addItemsToSpinner();
+
         myrecyclerview=(RecyclerView)findViewById(R.id.myrecyclerview);
         final RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(this);
         myrecyclerview.setLayoutManager(layoutManager);
@@ -102,9 +115,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        updateList(aww);
+        //updateList(aww);
 
     }
+
+    private void addItemsToSpinner() {
+        ArrayList<String> list=new ArrayList<String>();
+        list.add("Funny");
+        list.add("Food");
+        list.add("Aww");
+        final CustomSpinnerAdapter adapter=new CustomSpinnerAdapter(getApplicationContext(),list);
+        spinnertool.setAdapter(adapter);
+        spinnertool.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+               /* String item=adapter.getItem(position).toString();
+                Toast.makeText(getApplicationContext(), "Selected  : " + item,
+                        Toast.LENGTH_LONG).show();*/
+                switch (position) {
+                    case 0://funny
+                        updateList(funny);
+                        break;
+                    case 1://food
+                        updateList(food);
+                        break;
+                    case 2://aww
+                        updateList(aww);
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinnertool.setSelection(2);
+    }
+
     private void Notify(String notificationTitle, String notificationMessage){
             NotificationCompat.Builder  mBuilder = new NotificationCompat.Builder(this);
             mBuilder.setContentTitle(notificationTitle);
@@ -227,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void showPD() {
         if(progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
+            progressDialog = new ProgressDialog(MainActivity.this);
             progressDialog.setMessage("Loading...");
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
